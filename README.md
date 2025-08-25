@@ -1,76 +1,44 @@
-# 🛒 Flutter BLoC Cart App
+🛒 Flutter BLoC Cart App
+A simple 2-page Flutter app demonstrating the BLoC pattern.
+- Home Page: Shows a list of products with 'Add to Cart' buttons.
+- Cart Page: Displays the list of items added to the cart, with the option to remove them.
 
-A simple **2-page Flutter app** demonstrating the **BLoC pattern**.  
-- **Home Page**: Shows a list of products with "Add to Cart" buttons.  
-- **Cart Page**: Displays the list of items added to the cart, with the option to remove them.  
-
-This is a minimal example meant for beginners to quickly understand how to set up **BLoC** with navigation and state management.
-
----
-
-## 🚀 Features
-- Product list with "Add to Cart" button
+This is a minimal example meant for beginners to quickly understand how to set up BLoC with navigation and state management.
+🚀 Features
+- Product list with 'Add to Cart' button
 - Cart page showing selected items
 - Remove items from the cart
-- Simple **BLoC pattern** with `Event` + `State` + `Bloc`
-
----
-
-## 📂 Project Structure
-
+- Simple BLoC pattern with Event + State + Bloc
+📂 Project Structure
 lib/
-├─ main.dart
-├─ home_page.dart
-├─ cart_page.dart
-├─ bloc/
-│ ├─ cart_bloc.dart
-│ ├─ cart_event.dart
-│ └─ cart_state.dart
-└─ models/
-└─ product.dart
-
-yaml
-Copy
-Edit
-
----
-
-## 🛠️ Setup & Run
-
+ ├─ main.dart
+ ├─ home_page.dart
+ ├─ cart_page.dart
+ ├─ bloc/
+ │   ├─ cart_bloc.dart
+ │   ├─ cart_event.dart
+ │   └─ cart_state.dart
+ └─ models/
+     └─ product.dart
+🛠️ Setup & Run
 1. Clone the repo or copy the files into a new Flutter project.
-2. Add dependencies in `pubspec.yaml`:
-   ```yaml
+2. Add dependencies in pubspec.yaml:
    dependencies:
      flutter:
        sdk: flutter
      flutter_bloc: ^8.1.3
-Get packages:
-
-bash
-Copy
-Edit
-flutter pub get
-Run the app:
-
-bash
-Copy
-Edit
-flutter run
-📖 Code Overview
-models/product.dart
-dart
-Copy
-Edit
+3. Get packages:
+   flutter pub get
+4. Run the app:
+   flutter run
+lib/models/product.dart
 class Product {
   final int id;
   final String name;
 
   Product({required this.id, required this.name});
 }
-bloc/cart_event.dart
-dart
-Copy
-Edit
+lib/bloc/cart_event.dart
 import '../models/product.dart';
 
 abstract class CartEvent {}
@@ -84,10 +52,7 @@ class RemoveFromCart extends CartEvent {
   final Product product;
   RemoveFromCart(this.product);
 }
-bloc/cart_state.dart
-dart
-Copy
-Edit
+lib/bloc/cart_state.dart
 import '../models/product.dart';
 
 class CartState {
@@ -99,10 +64,7 @@ class CartState {
     return CartState(cartItems: cartItems ?? this.cartItems);
   }
 }
-bloc/cart_bloc.dart
-dart
-Copy
-Edit
+lib/bloc/cart_bloc.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cart_event.dart';
 import 'cart_state.dart';
@@ -120,10 +82,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
   }
 }
-home_page.dart
-dart
-Copy
-Edit
+lib/home_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/cart_bloc.dart';
@@ -174,10 +133,7 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-cart_page.dart
-dart
-Copy
-Edit
+lib/cart_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/cart_bloc.dart';
@@ -217,10 +173,7 @@ class CartPage extends StatelessWidget {
     );
   }
 }
-main.dart
-dart
-Copy
-Edit
+lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/cart_bloc.dart';
