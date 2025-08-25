@@ -1,0 +1,134 @@
+lib/main.dart
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'cart_provider.dart';
+import 'cart_page.dart';
+
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => CartProvider(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Provider Cart Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const ProductListPage(),
+    );
+  }
+}
+
+class ProductListPage extends StatelessWidget {
+  const ProductListPage({super.key});
+
+  final List<String> products = const ["Apple", "Banana", "Orange", "Mango"];
+
+  @override
+  Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Products"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CartPage()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
+          return ListTile(
+            title: Text(product),
+            trailing: ElevatedButton(
+              child: const Text("Add to Cart"),
+              onPressed: () => cart.addItem(product),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+lib/cart_provider.dart
+import 'package:flutter/foundation.dart';
+
+class CartProvider extends ChangeNotifier {
+  final List<String> _items = [];
+
+  List<String> get items => _items;
+
+  void addItem(String item) {
+    _items.add(item);
+    notifyListeners();
+  }
+
+  void removeItem(String item) {
+    _items.remove(item);
+    notifyListeners();
+  }
+
+  void clear() {
+    _items.clear();
+    notifyListeners();
+  }
+}
+
+lib/cart_page.dart
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'cart_provider.dart';
+
+class CartPage extends StatelessWidget {
+  const CartPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("Cart")),
+      body: cart.items.isEmpty
+          ? const Center(child: Text("Cart is empty"))
+          : ListView.builder(
+              itemCount: cart.items.length,
+              itemBuilder: (context, index) {
+                final item = cart.items[index];
+                return ListTile(
+                  title: Text(item),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.remove_circle),
+                    onPressed: () => cart.removeItem(item),
+                  ),
+                );
+              },
+            ),
+      bottomNavigationBar: cart.items.isNotEmpty
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                child: const Text("Clear Cart"),
+                onPressed: () => cart.clear(),
+              ),
+            )
+          : null,
+    );
+  }
+}
